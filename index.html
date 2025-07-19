@@ -1,0 +1,97 @@
+// Folder Structure Ready for GitHub Pages Hosting
+
+📁 old-movies-website/
+├── index.html            // Main movie list page (users view)
+├── admin.html            // Admin-only upload page (password protected)
+├── style.css             // Styling for all pages
+├── admin.js              // Admin panel JS (password + upload)
+└── movies.js             // Loads movie data from localStorage (used in index.html)
+
+// Below is the full code for each file
+
+===============================
+📄 index.html
+===============================
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Old Movies Download</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="movies.js"></script>
+</head>
+<body>
+  <h1>📽️ Old Movies Download</h1>
+  <div id="movie-list"></div>
+</body>
+</html>
+
+===============================
+📄 admin.html (already shared earlier)
+===============================
+(See previous response for full code — admin.html with password and upload form)
+
+===============================
+📄 style.css
+===============================
+
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background: #0f0f0f;
+  color: #fff;
+}
+input, button {
+  margin: 8px;
+  padding: 8px;
+  font-size: 14px;
+}
+#movie-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.movie {
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 10px;
+  width: 250px;
+  background: #1c1c1c;
+}
+.movie img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+===============================
+📄 movies.js
+===============================
+
+window.onload = function () {
+  const movies = JSON.parse(localStorage.getItem("movies") || "[]");
+  const list = document.getElementById("movie-list");
+
+  if (!movies.length) {
+    list.innerHTML = "<p>No movies available. Check back soon!</p>";
+    return;
+  }
+
+  movies.forEach(movie => {
+    const div = document.createElement("div");
+    div.className = "movie";
+    div.innerHTML = `
+      <h2>${movie.title}</h2>
+      <img src="${movie.poster}" alt="${movie.title}" />
+      <p><strong>Cast:</strong> ${movie.cast}</p>
+      <p><strong>Download:</strong></p>
+      <ul>
+        ${Object.entries(movie.quality).map(([label, url]) => 
+          url ? `<li><a href="${url}" target="_blank">${label}</a></li>` : ""
+        ).join('')}
+      </ul>
+    `;
+    list.appendChild(div);
+  });
+};
